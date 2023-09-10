@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  db:
+    container_name: PostgreSQL
+    image: postgres:latest
+    restart: unless-stopped  # always | on-failure | unless-stopped
+    environment:
+      POSTGRES_USER: ${root_user}
+      POSTGRES_PASSWORD: ${root_password}
+      POSTGRES_DB: ${db_name}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+  
+  pgadmin:
+    container_name: PGAdmin4
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped  # always | on-failure | unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${pgadmin_email}
+      PGADMIN_DEFAULT_PASSWORD: ${pgadmin_password}
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  db:
+    driver: local
+  
+  pgadmin:
+    driver: local
